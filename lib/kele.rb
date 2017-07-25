@@ -1,5 +1,5 @@
 require 'httparty'
-rquire 'json'
+require 'json'
 
 class Kele
   include HTTParty
@@ -11,7 +11,9 @@ class Kele
     response = self.class.post("#{@base_url}/sessions",
       body: {email: email, password: password}
     )
-
+      
+    puts response  
+      
     if response && response["auth_token"]
       @auth_token = response["auth_token"]
       puts "#{email} is sucessfully in with auth_token #{@auth_token}"
@@ -21,7 +23,7 @@ class Kele
   end
 
   def get_me
-    response = self.class.get("#{@base_url}/users/", #how to refer to user you are trying to find??
+    response = self.class.get("#{@base_url}/users/me",
     headers: { "authorization" => @auth_token })
     @user_info = JSON.parse(response.body)
   end
