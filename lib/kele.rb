@@ -37,7 +37,24 @@ class Kele
     headers: { "authorization" => @auth_token })
     @availability_info = JSON.parse(response.body)
   end
+  
+  def get_messages
+    response = self.class.get("#{@base_url}/message_threads",
+    headers: { "authorization" => @auth_token })
+    @messages_info = JSON.parse(response.body)
+  end
 
-
+  def create_message(sender, recipient_id, token, subject, body)
+    response = self.class.post("#{@base_url}/messages",
+      query: { "sender" => sender, "recipient_id" => recipient_id,
+                "token" => token, "subject" => subject, "stripped-text" => body },
+      headers: { "authorization" => @auth_token }
+    )
+    if response["success"]
+      puts "Message has sucessfully sent"
+    else
+      puts "Message failed to send"
+    end
+  end
 
 end
