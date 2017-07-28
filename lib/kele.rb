@@ -1,11 +1,12 @@
 require 'httparty'
 require 'json'
 require './lib/roadmap'
+require 'pry'
 
 class Kele
   include HTTParty
   include Roadmap
-
+  
 
 
   def initialize(email, password)
@@ -38,8 +39,8 @@ class Kele
     @availability_info = JSON.parse(response.body)
   end
   
-  def get_messages
-    response = self.class.get("#{@base_url}/message_threads",
+  def get_messages(page = 0)
+    response = self.class.get("#{@base_url}/message_threads?page=#{page}",
     headers: { "authorization" => @auth_token })
     @messages_info = JSON.parse(response.body)
   end
